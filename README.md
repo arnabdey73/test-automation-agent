@@ -242,7 +242,37 @@ The configuration directory contains settings for:
 
 ## Deployment
 
-The project includes GitHub Actions workflows for CI/CD and automatic deployment to Vercel.
+### Azure DevOps Setup
+
+The project uses Azure DevOps for CI/CD pipelines. To set up:
+
+1. Import the repository into Azure DevOps
+2. Create a pipeline using the `azure-pipelines.yml` file in the root
+3. Add the following pipeline variables in Azure DevOps:
+   - `VERCEL_TOKEN`: Your Vercel deployment token
+   - `VERCEL_PROJECT_ID`: Your Vercel project ID
+   - `VERCEL_ORG_ID`: Your Vercel organization ID
+   - `OPENAI_API_KEY`: Your OpenAI API key for AI features (optional if not using AI features)
+
+### Vercel Deployment
+
+The UI component is configured to deploy on Vercel:
+
+1. Create a new project in Vercel
+2. Link it to your repository
+3. Set the following settings:
+   - **Framework Preset**: Astro
+   - **Root Directory**: agent-ui
+   - **Build Command**: npm run build
+   - **Output Directory**: dist
+   - **Environment Variables**: Add any required environment variables
+
+Or deploy directly using Vercel CLI:
+
+```bash
+cd agent-ui
+vercel --prod
+```
 
 ## Contributing
 
