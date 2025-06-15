@@ -1,0 +1,122 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+
+// Example test data
+const testSuites = [
+  {
+    id: "ui-tests",
+    name: "UI Tests",
+    total: 24,
+    passed: 22,
+    failed: 1,
+    skipped: 1,
+    lastRun: "2025-06-14T10:30:00Z",
+  },
+  {
+    id: "regression-tests",
+    name: "Regression Tests",
+    total: 36,
+    passed: 33,
+    failed: 3,
+    skipped: 0,
+    lastRun: "2025-06-14T09:15:00Z",
+  }
+];
+---
+
+<MainLayout title="Test Automation Agent - Dashboard">
+  <div class="space-y-8">
+    <div>
+      <h2 class="text-3xl font-bold tracking-tight">Dashboard</h2>
+      <p class="text-muted-foreground">Overview of your test automation suites and recent results.</p>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <Card>
+        <CardHeader>
+          <CardTitle>Total Tests</CardTitle>
+          <CardDescription>All available test cases</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p class="text-4xl font-bold">{testSuites.reduce((acc, suite) => acc + suite.total, 0)}</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-success">Passing</CardTitle>
+          <CardDescription>Successfully passing tests</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p class="text-4xl font-bold text-success">{testSuites.reduce((acc, suite) => acc + suite.passed, 0)}</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-destructive">Failing</CardTitle>
+          <CardDescription>Tests that need attention</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p class="text-4xl font-bold text-destructive">{testSuites.reduce((acc, suite) => acc + suite.failed, 0)}</p>
+        </CardContent>
+      </Card>
+    </div>
+
+    <div class="space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-semibold">Test Suites</h3>
+        <div>
+          <Button client:visible>Run All Tests</Button>
+        </div>
+      </div>
+
+      <div class="grid gap-4">
+        {testSuites.map(suite => (
+          <Card>
+            <CardHeader>
+              <div class="flex justify-between items-start">
+                <div>
+                  <CardTitle>{suite.name}</CardTitle>
+                  <CardDescription>
+                    Last run: {new Date(suite.lastRun).toLocaleString()}
+                  </CardDescription>
+                </div>
+                <Button client:visible variant="outline" size="sm">Run Suite</Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div class="flex gap-4">
+                <div>
+                  <p class="text-sm font-medium">Total</p>
+                  <p class="text-2xl font-bold">{suite.total}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-success">Passed</p>
+                  <p class="text-2xl font-bold text-success">{suite.passed}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-destructive">Failed</p>
+                  <p class="text-2xl font-bold text-destructive">{suite.failed}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-muted-foreground">Skipped</p>
+                  <p class="text-2xl font-bold text-muted-foreground">{suite.skipped}</p>
+                </div>
+              </div>
+              <div class="mt-4 w-full bg-secondary rounded-full h-2 overflow-hidden">
+                <div class="flex h-full">
+                  <div class="bg-success h-full" style={`width: ${(suite.passed / suite.total) * 100}%`}></div>
+                  <div class="bg-destructive h-full" style={`width: ${(suite.failed / suite.total) * 100}%`}></div>
+                  <div class="bg-muted h-full" style={`width: ${(suite.skipped / suite.total) * 100}%`}></div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </div>
+</MainLayout>

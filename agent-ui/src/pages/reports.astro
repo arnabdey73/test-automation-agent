@@ -1,0 +1,138 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+
+// Example reports data
+const reports = [
+  {
+    id: "report-1",
+    name: "Daily UI Tests - June 15, 2025",
+    date: "2025-06-15T10:30:00Z",
+    status: "completed",
+    duration: "4m 12s",
+    stats: {
+      total: 24,
+      passed: 22,
+      failed: 1,
+      skipped: 1
+    }
+  },
+  {
+    id: "report-2",
+    name: "Weekly Regression - June 14, 2025",
+    date: "2025-06-14T09:15:00Z",
+    status: "completed",
+    duration: "12m 45s",
+    stats: {
+      total: 36,
+      passed: 33,
+      failed: 3,
+      skipped: 0
+    }
+  },
+  {
+    id: "report-3",
+    name: "Performance Benchmark - June 13, 2025",
+    date: "2025-06-13T14:20:00Z",
+    status: "completed",
+    duration: "8m 32s",
+    stats: {
+      total: 15,
+      passed: 12,
+      failed: 2,
+      skipped: 1
+    }
+  }
+];
+
+// Success percentage calculation
+function calculateSuccessPercentage(stats) {
+  return ((stats.passed / stats.total) * 100).toFixed(1);
+}
+---
+
+<MainLayout title="Test Automation Agent - Reports">
+  <div class="space-y-8">
+    <div>
+      <h2 class="text-3xl font-bold tracking-tight">Test Reports</h2>
+      <p class="text-muted-foreground">View test execution results and download reports</p>
+    </div>
+
+    <div class="flex justify-between items-center">
+      <div>
+        <h3 class="text-xl font-semibold">Recent Reports</h3>
+      </div>
+      <div class="space-x-2">
+        <Button client:visible variant="outline">Filter</Button>
+        <Button client:visible>Generate Report</Button>
+      </div>
+    </div>
+
+    <div class="grid gap-4">
+      {reports.map(report => (
+        <Card>
+          <CardHeader>
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-2">
+              <CardTitle className="text-xl">{report.name}</CardTitle>
+              <span class="text-sm text-muted-foreground">
+                Generated: {new Date(report.date).toLocaleString()}
+              </span>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-sm font-medium">Status</span>
+                  <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                    {report.status}
+                  </span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-sm font-medium">Duration</span>
+                  <span>{report.duration}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-sm font-medium">Success Rate</span>
+                  <span>{calculateSuccessPercentage(report.stats)}%</span>
+                </div>
+              </div>
+              <div class="grid grid-cols-4 gap-2 text-center">
+                <div class="rounded-md border p-2">
+                  <span class="text-sm font-medium">Total</span>
+                  <p class="text-2xl font-bold">{report.stats.total}</p>
+                </div>
+                <div class="rounded-md border p-2 bg-success/10 text-success border-success/20">
+                  <span class="text-sm font-medium">Passed</span>
+                  <p class="text-2xl font-bold">{report.stats.passed}</p>
+                </div>
+                <div class="rounded-md border p-2 bg-destructive/10 text-destructive border-destructive/20">
+                  <span class="text-sm font-medium">Failed</span>
+                  <p class="text-2xl font-bold">{report.stats.failed}</p>
+                </div>
+                <div class="rounded-md border p-2 bg-muted/50 text-muted-foreground border-muted">
+                  <span class="text-sm font-medium">Skipped</span>
+                  <p class="text-2xl font-bold">{report.stats.skipped}</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <div class="flex w-full justify-between">
+              <Button client:visible variant="outline" size="sm">View Details</Button>
+              <div class="space-x-2">
+                <Button client:visible variant="ghost" size="sm">
+                  Share
+                </Button>
+                <Button client:visible variant="outline" size="sm">
+                  Download HTML
+                </Button>
+              </div>
+            </div>
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+  </div>
+</MainLayout>

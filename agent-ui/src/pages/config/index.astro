@@ -1,0 +1,217 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+
+// Example configuration data
+const config = {
+  general: {
+    environment: "development",
+    baseUrl: "http://localhost:3000",
+    apiUrl: "http://localhost:3001/api",
+    reportDir: "../test-results"
+  },
+  testing: {
+    headless: true,
+    browsers: ["chromium", "firefox", "webkit"],
+    workers: 4,
+    retries: 1,
+    timeout: 30000,
+    screenshotOnFailure: true,
+    traceOnFailure: true
+  },
+  ai: {
+    enabled: true,
+    features: {
+      testGeneration: true,
+      visualRegression: true,
+      testPrioritization: true
+    },
+    openaiApiKey: "●●●●●●●●●●●●●●●●●●●●"
+  }
+};
+---
+
+<MainLayout title="Test Automation Agent - Configuration">
+  <div class="space-y-8">
+    <div>
+      <h2 class="text-3xl font-bold tracking-tight">Configuration</h2>
+      <p class="text-muted-foreground">Manage test automation settings and AI features</p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+      <Card>
+        <CardHeader>
+          <CardTitle>General Settings</CardTitle>
+          <CardDescription>Core application settings</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="text-sm font-medium">Environment</label>
+                <div class="mt-1 flex">
+                  <select class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
+                    <option value="development" selected>Development</option>
+                    <option value="staging">Staging</option>
+                    <option value="production">Production</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="text-sm font-medium">Base URL</label>
+                <input type="text" value={config.general.baseUrl} class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" />
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="text-sm font-medium">API URL</label>
+                <input type="text" value={config.general.apiUrl} class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" />
+              </div>
+              <div>
+                <label class="text-sm font-medium">Report Directory</label>
+                <input type="text" value={config.general.reportDir} class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="justify-end">
+          <Button client:visible>Save Changes</Button>
+        </CardFooter>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>AI Configuration</CardTitle>
+          <CardDescription>Configure AI-powered testing features</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div class="space-y-4">
+            <div class="flex items-center space-x-2">
+              <input type="checkbox" id="ai-enabled" checked={config.ai.enabled} class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+              <label for="ai-enabled" class="text-sm font-medium">Enable AI Features</label>
+            </div>
+            
+            <div class="ml-6 space-y-3">
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="test-generation" checked={config.ai.features.testGeneration} class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                <label for="test-generation" class="text-sm font-medium">Test Generation from Specifications</label>
+              </div>
+              
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="visual-regression" checked={config.ai.features.visualRegression} class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                <label for="visual-regression" class="text-sm font-medium">Visual Regression Testing</label>
+              </div>
+              
+              <div class="flex items-center space-x-2">
+                <input type="checkbox" id="test-prioritization" checked={config.ai.features.testPrioritization} class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                <label for="test-prioritization" class="text-sm font-medium">Test Prioritization</label>
+              </div>
+            </div>
+            
+            <div class="pt-2">
+              <label class="text-sm font-medium">OpenAI API Key</label>
+              <div class="mt-1 flex">
+                <input type="password" value={config.ai.openaiApiKey} class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" />
+              </div>
+              <p class="mt-1 text-xs text-muted-foreground">Required for test generation. Will be stored securely.</p>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="justify-end">
+          <Button client:visible>Save AI Settings</Button>
+        </CardFooter>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Test Execution Settings</CardTitle>
+          <CardDescription>Configure how tests are executed</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div class="space-y-4">
+            <div class="flex items-center space-x-2">
+              <input type="checkbox" id="headless" checked={config.testing.headless} class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+              <label for="headless" class="text-sm font-medium">Run tests in headless mode</label>
+            </div>
+            
+            <div>
+              <label class="text-sm font-medium">Browsers</label>
+              <div class="mt-2 space-y-2">
+                <div class="flex items-center space-x-2">
+                  <input type="checkbox" id="chromium" checked={config.testing.browsers.includes("chromium")} class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                  <label for="chromium" class="text-sm font-medium">Chromium</label>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <input type="checkbox" id="firefox" checked={config.testing.browsers.includes("firefox")} class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                  <label for="firefox" class="text-sm font-medium">Firefox</label>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <input type="checkbox" id="webkit" checked={config.testing.browsers.includes("webkit")} class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                  <label for="webkit" class="text-sm font-medium">WebKit</label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="text-sm font-medium">Workers</label>
+                <input type="number" value={config.testing.workers} min="1" max="8" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" />
+              </div>
+              <div>
+                <label class="text-sm font-medium">Retries</label>
+                <input type="number" value={config.testing.retries} min="0" max="3" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" />
+              </div>
+            </div>
+            
+            <div>
+              <label class="text-sm font-medium">Timeout (ms)</label>
+              <input type="number" value={config.testing.timeout} min="5000" step="1000" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" />
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="justify-end">
+          <Button client:visible>Save Test Settings</Button>
+        </CardFooter>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Test Generation</CardTitle>
+          <CardDescription>Generate tests using AI</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div class="space-y-4">
+            <div>
+              <label class="text-sm font-medium">Test Type</label>
+              <div class="mt-1">
+                <select class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
+                  <option value="ui">UI Test</option>
+                  <option value="regression">Regression Test</option>
+                  <option value="api">API Test</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label class="text-sm font-medium">Test Specification (JSON)</label>
+              <div class="mt-1">
+                <textarea class="flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" placeholder='{ "name": "Feature Name", "description": "Test this feature", "testCases": [] }'></textarea>
+              </div>
+            </div>
+            
+            <div>
+              <label class="text-sm font-medium">Output Path</label>
+              <div class="mt-1">
+                <input type="text" placeholder="../tests/ui/generated-test.test.ts" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50" />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="justify-end">
+          <Button client:visible>Generate Test</Button>
+        </CardFooter>
+      </Card>
+    </div>
+  </div>
+</MainLayout>

@@ -1,0 +1,94 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+
+// Example config settings
+const configSections = [
+  {
+    id: "test-environments",
+    title: "Test Environments",
+    description: "Configure environments for test execution",
+    settings: [
+      { name: "Default Environment", value: "Development" },
+      { name: "API Base URL", value: "https://api.example.com" },
+      { name: "Headless Mode", value: "Enabled" },
+      { name: "Browser", value: "Chromium" }
+    ]
+  },
+  {
+    id: "execution",
+    title: "Test Execution",
+    description: "Configure how tests are executed",
+    settings: [
+      { name: "Parallel Test Execution", value: "Enabled" },
+      { name: "Workers", value: "4" },
+      { name: "Retry Failed Tests", value: "1" },
+      { name: "Timeout", value: "30000ms" }
+    ]
+  },
+  {
+    id: "reporting",
+    title: "Reporting",
+    description: "Configure test result reporting",
+    settings: [
+      { name: "Report Format", value: "HTML, JSON" },
+      { name: "Report Directory", value: "./test-results" },
+      { name: "Screenshot On Failure", value: "Enabled" },
+      { name: "Video Recording", value: "Disabled" }
+    ]
+  },
+  {
+    id: "integrations",
+    title: "CI/CD Integrations",
+    description: "Configure integrations with CI/CD tools",
+    settings: [
+      { name: "Vercel Integration", value: "Enabled" },
+      { name: "GitHub Actions", value: "Enabled" },
+      { name: "Notification Service", value: "Slack" },
+      { name: "Status Webhooks", value: "Configured (1)" }
+    ]
+  }
+];
+---
+
+<MainLayout title="Test Automation Agent - Configuration">
+  <div class="space-y-8">
+    <div>
+      <h2 class="text-3xl font-bold tracking-tight">Configuration</h2>
+      <p class="text-muted-foreground">Manage test automation settings and integrations</p>
+    </div>
+
+    <div class="flex justify-end">
+      <div class="space-x-2">
+        <Button client:visible variant="outline">Reset to Default</Button>
+        <Button client:visible>Save Configuration</Button>
+      </div>
+    </div>
+
+    {configSections.map(section => (
+      <Card>
+        <CardHeader>
+          <CardTitle>{section.title}</CardTitle>
+          <CardDescription>{section.description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div class="space-y-4">
+            {section.settings.map(setting => (
+              <div class="flex justify-between items-center py-2 border-b">
+                <span class="font-medium">{setting.name}</span>
+                <div class="flex items-center gap-4">
+                  <span class="text-sm text-muted-foreground">{setting.value}</span>
+                  <Button client:visible size="sm" variant="ghost">Edit</Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button client:visible size="sm" variant="outline">Advanced Settings</Button>
+        </CardFooter>
+      </Card>
+    ))}
+  </div>
+</MainLayout>

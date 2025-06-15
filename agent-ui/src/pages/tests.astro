@@ -1,0 +1,99 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+
+// Example test suites
+const testSuites = [
+  {
+    id: "ui-tests",
+    name: "UI Tests",
+    description: "Tests for user interface components and interactions",
+    total: 24,
+    lastRun: "2025-06-14T10:30:00Z",
+    testCases: [
+      { id: "login-test", name: "Login Test", status: "passed" },
+      { id: "navigation-test", name: "Navigation Test", status: "passed" },
+      { id: "form-submission", name: "Form Submission", status: "failed" },
+      { id: "responsive-design", name: "Responsive Design", status: "passed" }
+    ]
+  },
+  {
+    id: "regression-tests",
+    name: "Regression Tests",
+    description: "Tests to ensure existing functionality continues to work",
+    total: 36,
+    lastRun: "2025-06-14T09:15:00Z",
+    testCases: [
+      { id: "api-integration", name: "API Integration", status: "passed" },
+      { id: "database-backup", name: "Database Backup", status: "passed" },
+      { id: "security-checks", name: "Security Checks", status: "failed" },
+      { id: "performance-benchmark", name: "Performance Benchmark", status: "failed" },
+      { id: "error-handling", name: "Error Handling", status: "passed" }
+    ]
+  }
+];
+---
+
+<MainLayout title="Test Automation Agent - Test Suites">
+  <div class="space-y-8">
+    <div>
+      <h2 class="text-3xl font-bold tracking-tight">Test Suites</h2>
+      <p class="text-muted-foreground">Manage and run your test suites</p>
+    </div>
+
+    <div class="flex justify-between items-center">
+      <div></div>
+      <div class="space-x-2">
+        <Button client:visible>Create Test Suite</Button>
+        <Button client:visible variant="outline">Import Tests</Button>
+      </div>
+    </div>
+
+    {testSuites.map(suite => (
+      <div class="mb-8">
+        <Card>
+          <CardHeader>
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+              <div>
+                <CardTitle className="text-xl">{suite.name}</CardTitle>
+                <CardDescription>{suite.description}</CardDescription>
+              </div>
+              <div class="flex gap-2">
+                <Button client:visible size="sm" variant="outline">Edit</Button>
+                <Button client:visible size="sm">Run Suite</Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div class="space-y-4">
+              <div class="flex justify-between items-center border-b pb-2">
+                <span class="font-medium">Test Cases ({suite.testCases.length})</span>
+                <span class="text-sm text-muted-foreground">Last run: {new Date(suite.lastRun).toLocaleString()}</span>
+              </div>
+              <div class="space-y-2">
+                {suite.testCases.map(test => (
+                  <div class="flex justify-between items-center py-2 px-2 hover:bg-muted/50 rounded-md">
+                    <div class="flex items-center gap-2">
+                      {test.status === "passed" && (
+                        <span class="h-2 w-2 bg-success rounded-full"></span>
+                      )}
+                      {test.status === "failed" && (
+                        <span class="h-2 w-2 bg-destructive rounded-full"></span>
+                      )}
+                      <span>{test.name}</span>
+                    </div>
+                    <div class="flex gap-2">
+                      <Button client:visible size="sm" variant="ghost">View Details</Button>
+                      <Button client:visible size="sm" variant="outline">Run</Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    ))}
+  </div>
+</MainLayout>
