@@ -1,0 +1,92 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    exclude:
+    - README.md
+    - .gitignore
+
+pr:
+  branches:
+    include:
+    - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  NODE_VERSION: '20.x'
+  TESTS_DIR: '$(System.DefaultWorkingDirectory)/tests'
+  RESULTS_DIR: '$(System.DefaultWorkingDirectory)/test-results'
+  UI_DIR: '$(System.DefaultWorkingDirectory)/agent-ui'
+
+stages:
+- stage: Test
+  displayName: 'Run Tests'
+  jobs:
+  - job: RunTests
+    steps:
+    - task: NodeTool@0
+      displayName: 'Install Node.js'
+      inputs:
+        versionSpec: $(NODE_VERSION)
+
+    - script: npm ci
+      displayName: 'Install dependencies'
+
+    - script: |
+        cd $(TESTS_DIR)
+        npx playwright install --with-deps
+      displayName: 'Install Playwright browsers'
+
+    - script: |
+        cd $(TESTS_DIR)
+        npx playwright test
+      displayName: 'Run tests'
+
+    - task: PublishTestResults@2
+      displayName: 'Publish test results'
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '$(RESULTS_DIR)/test-results.xml'
+        mergeTestResults: true
+        testRunTitle: 'Playwright Tests'
+      condition: succeededOrFailed()
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish test artifacts'
+      inputs:
+        PathtoPublish: '$(RESULTS_DIR)'
+        ArtifactName: 'test-results'
+      condition: succeededOrFailed()
+
+- stage: Deploy
+  displayName: 'Deploy to Vercel'
+  dependsOn: Test
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+  - job: DeployToVercel
+    steps:
+    - task: NodeTool@0
+      displayName: 'Install Node.js'
+      inputs:
+        versionSpec: $(NODE_VERSION)
+
+    - script: npm install --global vercel@latest
+      displayName: 'Install Vercel CLI'
+
+    - script: |
+        cd $(UI_DIR)
+        npm ci
+        npm run build
+      displayName: 'Build UI'
+
+    - script: |
+        cd $(UI_DIR)
+        vercel --prod --token $(VERCEL_TOKEN) --yes
+      displayName: 'Deploy to Vercel'
+      env:
+        VERCEL_TOKEN: $(VERCEL_TOKEN)
+        VERCEL_PROJECT_ID: $(VERCEL_PROJECT_ID)
+        VERCEL_ORG_ID: $(VERCEL_ORG_ID)
