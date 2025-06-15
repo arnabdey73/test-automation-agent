@@ -18,6 +18,8 @@
     "test:ui": "cd tests && npx playwright test ui/",
     "test:regression": "cd tests && npx playwright test regression/",
     "test:generated": "cd tests && npx playwright test generated/",
+    "test:manual:record": "cd runner && node run.js --enable-manual-test --manual-test-dir ../manual-tests",
+    "test:manual:replay": "cd runner && node run.js --enable-manual-test --manual-test-dir ../manual-tests",
     "report": "cd tests && npx playwright show-report",
     "build": "cd agent-ui && npm run build",
     "ai:generate": "cd ai && node index.js generate",

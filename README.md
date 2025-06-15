@@ -15,13 +15,19 @@ test-automation-agent/
 ├── runner/                  # Node.js server to orchestrate testing
 ├── ai/                      # AI-powered testing features
 │   ├── samples/             # Sample specifications for test generation
+│   ├── manual-test/         # Manual test simulation
 │   ├── gpt-test-generator.js  # GPT-based test generation
 │   ├── visual-regression.js   # Screenshot comparison for UI regression
 │   └── test-prioritization.js # Test prioritization based on history
 ├── config/                  # Test configuration files
 ├── test-results/            # Test results and artifacts
 │   └── visual-diff/         # Visual regression comparison results
-├── .github/workflows/       # CI for GitHub Actions
+├── manual-tests/            # Manual test simulation artifacts
+│   ├── sessions/            # Recorded test session data
+│   ├── recordings/          # Video recordings of test sessions
+│   ├── screenshots/         # Screenshots captured during tests
+│   └── results/             # Replay results and analysis
+├── azure-pipelines.yml      # CI/CD configuration for Azure DevOps
 └── package.json             # Root package.json with workspace configuration
 ```
 
@@ -42,7 +48,7 @@ test-automation-agent/
 - **Test Suite Management**: Organize and execute test suites
 - **Comprehensive Reports**: Detailed reports with metrics and visualizations
 - **Configurable Environment**: Easy configuration for different test environments
-- **CI/CD Integration**: Built-in support for GitHub Actions and Vercel deployment
+- **CI/CD Integration**: Built-in support for Azure DevOps and Vercel deployment
 - **AI-Powered Test Generation**: Automatically generate test cases using AI
 - **Visual Regression Testing**: Detect UI changes with automated screenshot comparisons
 - **Test Prioritization**: Intelligent test prioritization based on historical data
@@ -207,6 +213,31 @@ Update test history:
 ```bash
 npm run ai:history:update
 ```
+
+#### Manual Test Simulation
+
+The agent includes a powerful manual test simulation feature that allows you to record, replay, and manage manual browser sessions. This is useful for capturing complex user interactions that are difficult to script.
+
+##### Usage
+
+Start the manual test simulation interface:
+
+```bash
+npm run test:manual:record
+```
+
+This will start a server with endpoints for managing manual test sessions and open a web interface for recording and replaying test sessions.
+
+The manual test simulation feature provides:
+
+- **Browser Recording**: Record real user interactions in a browser session
+- **Step-by-Step Replay**: Replay recorded sessions with configurable delays
+- **Screenshots**: Capture screenshots for each interaction
+- **Session Management**: Browse, view, and delete recorded sessions
+- **API Access**: Programmatic access to record and replay functionality
+- **Video Recording**: Capture video recordings of manual sessions
+
+The manual test simulation uses Playwright to control a browser instance and can be integrated with your automated testing workflow.
 
 ### Configuration
 

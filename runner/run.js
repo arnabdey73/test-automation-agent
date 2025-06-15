@@ -10,6 +10,9 @@ import { program } from 'commander';
 import fs from 'fs/promises';
 import { existsSync } from 'fs';
 
+// Import ManualTestAPI
+import ManualTestAPI from './manual-test-api.js';
+
 // Get dirname
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -22,6 +25,8 @@ program
   .option('--enable-ai', 'Enable AI-powered features', true)
   .option('--enable-visual', 'Enable visual regression testing', true)
   .option('--enable-priority', 'Enable test prioritization', true)
+  .option('--enable-manual-test', 'Enable manual test simulation', true)
+  .option('--manual-test-dir <path>', 'Path to manual test directory', '../manual-tests')
   .parse(process.argv);
 
 const options = program.opts();
@@ -50,6 +55,10 @@ const testState = {
     testGeneration: options.enableAi,
     visualRegression: options.enableVisual,
     testPrioritization: options.enablePriority
+  },
+  manualTest: {
+    enabled: options.enableManualTest,
+    sessionsDir: options.manualTestDir
   }
 };
 
@@ -87,26 +96,18 @@ app.use('/results', express.static(join(__dirname, options.resultsDir)));
 
 // API routes
 app.get('/api/status', (req, res) => {
-  res.json({ 
-    status: 'success',
-    data: testState
+  res.json({
+    running: testState.running,
+    suite: testState.suite
   });
 });
 
-// AI features routes
-app.get('/api/ai/status', (req, res) => {
-  res.json({
-    status: 'success',
-    data: {
-      enabled: testState.aiFeatures.enabled,
-      features: {
-        testGeneration: testState.aiFeatures.testGeneration,
-        visualRegression: testState.aiFeatures.visualRegression,
-        testPrioritization: testState.aiFeatures.testPrioritization
-      }
-    }
-  });
-});
+// Manual Test API Endpoints
+if (testState.manualTest.enabled) {
+  console.log(chalk.blue('🎮 Initializing Manual Test Simulation API...'));
+  const manualTestAPI = new ManualTestAPI();
+  app.use('/api/manual-test', manualTestAPI.getRouter());
+}
 
 // AI Features API Endpoints
 

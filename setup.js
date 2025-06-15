@@ -72,6 +72,30 @@ if (!fs.existsSync(generatedTestsDir)) {
   fs.mkdirSync(generatedTestsDir, { recursive: true });
 }
 
+// Create manual test directory structure
+const manualTestsDir = path.join(process.cwd(), 'manual-tests');
+const manualTestSessionsDir = path.join(manualTestsDir, 'sessions');
+const manualTestRecordingsDir = path.join(manualTestsDir, 'recordings');
+const manualTestScreenshotsDir = path.join(manualTestsDir, 'screenshots');
+const manualTestResultsDir = path.join(manualTestsDir, 'results');
+
+console.log('\n📁 Creating directories for Manual Test simulation...');
+if (!fs.existsSync(manualTestsDir)) {
+  fs.mkdirSync(manualTestsDir, { recursive: true });
+}
+if (!fs.existsSync(manualTestSessionsDir)) {
+  fs.mkdirSync(manualTestSessionsDir, { recursive: true });
+}
+if (!fs.existsSync(manualTestRecordingsDir)) {
+  fs.mkdirSync(manualTestRecordingsDir, { recursive: true });
+}
+if (!fs.existsSync(manualTestScreenshotsDir)) {
+  fs.mkdirSync(manualTestScreenshotsDir, { recursive: true });
+}
+if (!fs.existsSync(manualTestResultsDir)) {
+  fs.mkdirSync(manualTestResultsDir, { recursive: true });
+}
+
 // Check for OpenAI API key
 console.log('\n🔑 Checking for OpenAI API key...');
 if (!process.env.OPENAI_API_KEY) {
