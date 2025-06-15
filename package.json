@@ -1,0 +1,50 @@
+{
+  "name": "test-automation-agent",
+  "version": "0.1.0",
+  "description": "Automated test orchestration tool with UI dashboard",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "agent-ui",
+    "runner",
+    "tests"
+  ],
+  "scripts": {
+    "setup": "node setup.js",
+    "dev": "concurrently \"npm run dev:ui\" \"npm run dev:runner\"",
+    "dev:ui": "cd agent-ui && npm run dev",
+    "dev:runner": "cd runner && npm run dev",
+    "test": "cd tests && npx playwright test",
+    "test:ui": "cd tests && npx playwright test ui/",
+    "test:regression": "cd tests && npx playwright test regression/",
+    "test:generated": "cd tests && npx playwright test generated/",
+    "report": "cd tests && npx playwright show-report",
+    "build": "cd agent-ui && npm run build",
+    "ai:generate": "cd ai && node index.js generate",
+    "ai:generate:spec": "cd ai && node index.js generate --spec",
+    "ai:generate:feature": "cd ai && node index.js generate --feature",
+    "ai:generate:api": "cd ai && node index.js generate --api-docs",
+    "ai:visual": "cd ai && node index.js visual",
+    "ai:visual:update": "cd ai && node index.js visual --update-baselines",
+    "ai:prioritize": "cd ai && node index.js prioritize",
+    "ai:history:update": "cd ai && node index.js update-history",
+    "test:visual": "cd ai && node index.js visual",
+    "test:visual:update": "cd ai && node index.js visual --update-baselines",
+    "test:priority": "cd ai && node index.js prioritize",
+    "test:ai": "cd ai && node index.js"
+  },
+  "keywords": [
+    "testing",
+    "automation",
+    "playwright",
+    "nextjs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "openai": "^4.28.0"
+  }
+}

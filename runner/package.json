@@ -1,0 +1,25 @@
+{
+  "name": "test-runner",
+  "version": "1.0.0",
+  "description": "Runner for test automation agent",
+  "main": "run.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch run.js",
+    "start": "node run.js"
+  },
+  "keywords": [
+    "testing",
+    "automation",
+    "runner"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "ws": "^8.13.0",
+    "chalk": "^5.3.0",
+    "commander": "^11.0.0"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "testEnvironments": {
+    "development": {
+      "baseUrl": "http://localhost:3000",
+      "apiUrl": "http://localhost:3001/api"
+    },
+    "staging": {
+      "baseUrl": "https://test-agent-staging.example.com",
+      "apiUrl": "https://test-agent-staging.example.com/api"
+    },
+    "production": {
+      "baseUrl": "https://test-agent.example.com",
+      "apiUrl": "https://test-agent.example.com/api"
+    }
+  },
+  "testExecution": {
+    "headless": true,
+    "workers": 4,
+    "retries": 1,
+    "timeout": 30000,
+    "browsers": ["chromium", "firefox", "webkit"]
+  },
+  "reporting": {
+    "formats": ["html", "json"],
+    "outputDir": "../test-results",
+    "screenshots": "only-on-failure",
+    "video": false,
+    "tracing": "on-first-retry"
+  },
+  "ci": {
+    "integration": "vercel",
+    "notifyOn": ["failure", "success"],
+    "notifications": {
+      "slack": {
+        "enabled": false,
+        "webhook": ""
+      },
+      "email": {
+        "enabled": false,
+        "recipients": []
+      }
+    }
+  },
+  "ai": {
+    "enabled": true,
+    "testGeneration": {
+      "enabled": true,
+      "model": "gpt-4o",
+      "specDirectories": ["./specs", "./features"],
+      "outputDirectory": "../tests/generated"
+    },
+    "visualRegression": {
+      "enabled": true,
+      "baselineDir": "../tests/visual-baselines",
+      "diffDir": "../test-results/visual-diff",
+      "threshold": 0.1,
+      "updateBaselines": false
+    },
+    "testPrioritization": {
+      "enabled": true,
+      "historyFile": "../test-results/test-history.json",
+      "weightFactors": {
+        "failureRate": 0.4,
+        "recentFailures": 0.3,
+        "executionTime": 0.15,
+        "age": 0.05,
+        "codeChanges": 0.1
+      }
+    },
+    "apiKey": {
+      "environment": "OPENAI_API_KEY",
+      "keyVault": ""
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "name": "Login Page",
+  "description": "Test the login functionality with various account types",
+  "url": "/login",
+  "testCases": [
+    {
+      "name": "Successful login with valid credentials",
+      "steps": [
+        "Navigate to the login page",
+        "Enter valid username",
+        "Enter valid password",
+        "Click the login button"
+      ],
+      "expectedResults": [
+        "User should be redirected to the dashboard",
+        "User's name should be visible in the header"
+      ]
+    },
+    {
+      "name": "Failed login with invalid credentials",
+      "steps": [
+        "Navigate to the login page",
+        "Enter invalid username",
+        "Enter invalid password",
+        "Click the login button"
+      ],
+      "expectedResults": [
+        "Error message should be displayed",
+        "User should remain on the login page"
+      ]
+    },
+    {
+      "name": "Password recovery",
+      "steps": [
+        "Navigate to the login page",
+        "Click on 'Forgot password' link",
+        "Enter email address",
+        "Click on 'Reset password' button"
+      ],
+      "expectedResults": [
+        "Confirmation message should be displayed",
+        "User should receive password reset email"
+      ]
+    }
+  ],
+  "components": {
+    "username": {
+      "selector": "input[data-testid='username-input']",
+      "type": "input"
+    },
+    "password": {
+      "selector": "input[data-testid='password-input']",
+      "type": "password"
+    },
+    "loginButton": {
+      "selector": "button[data-testid='login-button']",
+      "type": "button"
+    },
+    "forgotPassword": {
+      "selector": "a[data-testid='forgot-password-link']",
+      "type": "link"
+    },
+    "errorMessage": {
+      "selector": "div[data-testid='error-message']",
+      "type": "text"
+    }
+  }
+}

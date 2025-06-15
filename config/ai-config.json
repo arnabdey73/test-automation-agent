@@ -1,0 +1,41 @@
+{
+  "openai": {
+    "model": "gpt-4o",
+    "temperature": 0.2,
+    "maxTokens": 4096
+  },
+  "testGeneration": {
+    "templates": {
+      "ui": "import { test, expect } from '@playwright/test';\n\n// {{TEST_DESCRIPTION}}\ntest('{{TEST_NAME}}', async ({ page }) => {\n  // Test implementation\n  {{TEST_STEPS}}\n});\n",
+      "api": "import { test, expect } from '@playwright/test';\n\n// {{TEST_DESCRIPTION}}\ntest('{{TEST_NAME}}', async ({ request }) => {\n  // Test implementation\n  {{TEST_STEPS}}\n});\n",
+      "regression": "import { test, expect } from '@playwright/test';\n\n// {{TEST_DESCRIPTION}}\ntest('{{TEST_NAME}}', async ({ page }) => {\n  // Test implementation\n  {{TEST_STEPS}}\n  \n  // Take screenshot for regression testing\n  await expect(page.locator('{{SCREENSHOT_SELECTOR}}')).toBeVisible();\n  await page.screenshot({ path: 'screenshots/{{SCREENSHOT_NAME}}.png' });\n});\n"
+    },
+    "samples": {
+      "specs": "../ai/samples/login-spec.json",
+      "features": "../ai/samples/shopping-cart.feature",
+      "apiDocs": "../ai/samples/api-docs.md"
+    }
+  },
+  "visualRegression": {
+    "resembleOptions": {
+      "scaleToSameSize": true,
+      "ignoreColors": false,
+      "ignoreAntialiasing": true
+    },
+    "screenshotConfig": {
+      "fullPage": true,
+      "timeout": 5000
+    }
+  },
+  "testPrioritization": {
+    "criteria": [
+      { "name": "failureRate", "weight": 0.4, "description": "Tests that fail more often" },
+      { "name": "recentFailures", "weight": 0.3, "description": "Tests that failed recently" },
+      { "name": "executionTime", "weight": 0.15, "description": "Tests that run faster" },
+      { "name": "age", "weight": 0.05, "description": "Tests that were not run recently" },
+      { "name": "codeChanges", "weight": 0.1, "description": "Tests affected by recent code changes" }
+    ],
+    "outputFormat": "json",
+    "maxTests": 50
+  }
+}
