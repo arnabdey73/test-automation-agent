@@ -1,6 +1,7 @@
 {
-	"runtime": "nodejs18.x",
-	"handler": "dist/server/entry.mjs",
-	"launcherType": "Nodejs",
-	"supportsResponseStreaming": true
+        "runtime": "nodejs20.x",
+        "handler": "dist/server/entry.mjs",
+        "launcherType": "Nodejs",
+        "maxDuration": 60,
+        "supportsResponseStreaming": true
 }

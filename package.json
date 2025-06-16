@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "description": "Automated test orchestration tool with Astro UI dashboard",
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

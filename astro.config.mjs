@@ -18,6 +18,9 @@ export default defineConfig({
   // Use Vercel adapter for deployment to Vercel
   adapter: vercel({
     analytics: true,
+    includeFiles: ['.env.production'],
+    maxDuration: 60, // Set function timeout to 60 seconds
+    target: 'node20',
   }),
   
   // For local production testing, comment out the Vercel adapter above and uncomment this:

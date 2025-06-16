@@ -8,5 +8,13 @@
   },
   "github": {
     "enabled": false
+  },
+  "functions": {
+    "api/**/*": {
+      "runtime": "nodejs20.x"
+    },
+    "*": {
+      "runtime": "nodejs20.x"
+    }
   }
 }
