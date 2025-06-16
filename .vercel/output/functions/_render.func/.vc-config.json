@@ -1,7 +1,6 @@
 {
-        "runtime": "nodejs20.x",
-        "handler": "entry.mjs",
-        "launcherType": "Nodejs",
-        "maxDuration": 60,
-        "supportsResponseStreaming": true
+  "runtime": "nodejs20.x",
+  "handler": "index.js",
+  "launcherType": "Nodejs",
+  "maxDuration": 60
 }

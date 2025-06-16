@@ -5,16 +5,5 @@
   "framework": "astro",
   "env": {
     "NODE_ENV": "production"
-  },
-  "github": {
-    "enabled": false
-  },
-  "functions": {
-    "api/**/*": {
-      "runtime": "nodejs20.x"
-    },
-    "*": {
-      "runtime": "nodejs20.x"
-    }
   }
 }
