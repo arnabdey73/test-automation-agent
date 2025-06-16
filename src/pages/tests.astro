@@ -1,0 +1,114 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import glob from 'glob';
+
+// Get dirname
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const testsDir = path.resolve(__dirname, '../../../tests');
+
+// Function to load real test files
+async function loadTestSuites() {
+  try {
+    // Define test suite categories
+    const testSuites = [
+      {
+        id: "ui-tests",
+        name: "UI Tests",
+        description: "Tests for user interface components and interactions",
+        testCases: []
+      },
+      {
+        id: "regression-tests",
+        name: "Regression Tests",
+        description: "Tests to ensure existing functionality continues to work",
+        testCases: []
+      },
+      {
+        id: "generated-tests",
+        name: "AI-Generated Tests",
+        description: "Tests generated with AI assistance",
+        testCases: []
+      }
+    ];
+    
+    // Add real test files counts - will be populated from the file system in a production implementation
+    return testSuites;
+  } catch (error) {
+    console.error("Error loading test suites:", error);
+    return [];
+  }
+}
+
+const testSuites = await loadTestSuites();
+---
+
+<MainLayout title="Test Automation Agent - Test Suites">
+  <div class="space-y-8">
+    <div>
+      <h2 class="text-3xl font-bold tracking-tight">Test Suites</h2>
+      <p class="text-muted-foreground">Manage and run your test suites</p>
+    </div>
+
+    <div class="flex justify-between items-center">
+      <div></div>
+      <div class="space-x-2">
+        <Button client:visible>Create Test Suite</Button>
+        <Button client:visible variant="outline">Import Tests</Button>
+      </div>
+    </div>
+
+    {testSuites.map(suite => (
+      <div class="mb-8">
+        <Card>
+          <CardHeader>
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+              <div>
+                <CardTitle className="text-xl">{suite.name}</CardTitle>
+                <CardDescription>{suite.description}</CardDescription>
+              </div>
+              <div class="flex gap-2">
+                <Button client:visible size="sm" variant="outline">Edit</Button>
+                <Button client:visible size="sm">Run Suite</Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div class="space-y-4">
+              <div class="flex justify-between items-center border-b pb-2">
+                <span class="font-medium">Test Cases ({suite.testCases?.length || 0})</span>
+                <span class="text-sm text-muted-foreground">No tests run yet</span>
+              </div>
+              <div class="space-y-2">
+                {suite.testCases && suite.testCases.length > 0 ? 
+                  suite.testCases.map((test: any) => (
+                    <div class="flex justify-between items-center py-2 px-2 hover:bg-muted/50 rounded-md">
+                      <div class="flex items-center gap-2">
+                        {test.status && test.status === "passed" && (
+                          <span class="h-2 w-2 bg-success rounded-full"></span>
+                        )}
+                        {test.status && test.status === "failed" && (
+                          <span class="h-2 w-2 bg-destructive rounded-full"></span>
+                        )}
+                        <span>{test.name || "Unnamed Test"}</span>
+                      </div>
+                      <div class="flex gap-2">
+                        <Button client:visible size="sm" variant="ghost">View Details</Button>
+                        <Button client:visible size="sm" variant="outline">Run</Button>
+                      </div>
+                    </div>
+                  )) : 
+                  <div class="text-center py-4 text-muted-foreground">No test cases found</div>
+                }
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    ))}
+  </div>
+</MainLayout>

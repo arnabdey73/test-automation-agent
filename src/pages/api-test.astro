@@ -1,0 +1,180 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="API Test">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">API Endpoint Tests</h1>
+    
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+      <h2 class="text-xl font-bold mb-4">Manual Test API</h2>
+      
+      <div class="mb-4">
+        <button id="listSessions" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          List Sessions
+        </button>
+        <div id="sessionsResult" class="mt-2 p-2 bg-gray-100 rounded"></div>
+      </div>
+      
+      <div class="mb-4">
+        <h3 class="text-lg font-bold mb-2">Start Recording</h3>
+        <div class="flex gap-2 mb-2">
+          <input id="sessionId" type="text" placeholder="Session ID" class="border rounded p-2" value="test-session-1" />
+          <input id="testName" type="text" placeholder="Test Name" class="border rounded p-2" value="Test Recording" />
+        </div>
+        <button id="startRecording" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+          Start Recording
+        </button>
+        <div id="startRecordingResult" class="mt-2 p-2 bg-gray-100 rounded"></div>
+      </div>
+      
+      <div class="mb-4">
+        <h3 class="text-lg font-bold mb-2">Record Action</h3>
+        <div class="flex gap-2 mb-2">
+          <input id="actionSessionId" type="text" placeholder="Session ID" class="border rounded p-2" value="test-session-1" />
+          <input id="actionType" type="text" placeholder="Action Type" class="border rounded p-2" value="click" />
+          <input id="actionTarget" type="text" placeholder="Target" class="border rounded p-2" value="#button" />
+        </div>
+        <button id="recordAction" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+          Record Action
+        </button>
+        <div id="recordActionResult" class="mt-2 p-2 bg-gray-100 rounded"></div>
+      </div>
+      
+      <div class="mb-4">
+        <h3 class="text-lg font-bold mb-2">Stop Recording</h3>
+        <div class="flex gap-2 mb-2">
+          <input id="stopSessionId" type="text" placeholder="Session ID" class="border rounded p-2" value="test-session-1" />
+        </div>
+        <button id="stopRecording" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+          Stop Recording
+        </button>
+        <div id="stopRecordingResult" class="mt-2 p-2 bg-gray-100 rounded"></div>
+      </div>
+      
+      <div class="mb-4">
+        <h3 class="text-lg font-bold mb-2">Replay Test</h3>
+        <div class="flex gap-2 mb-2">
+          <input id="replayTestName" type="text" placeholder="Test Name" class="border rounded p-2" value="Test Recording" />
+        </div>
+        <button id="replayTest" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+          Replay Test
+        </button>
+        <div id="replayTestResult" class="mt-2 p-2 bg-gray-100 rounded"></div>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<script>
+  // Handle list sessions
+  document.getElementById('listSessions')?.addEventListener('click', async () => {
+    const resultDiv = document.getElementById('sessionsResult');
+    try {
+      const response = await fetch('/api/manual-test/sessions');
+      const data = await response.json();
+      resultDiv.textContent = JSON.stringify(data, null, 2);
+      resultDiv.classList.add('text-green-600');
+    } catch (error) {
+      resultDiv.textContent = `Error: ${error.message}`;
+      resultDiv.classList.add('text-red-600');
+    }
+  });
+  
+  // Handle start recording
+  document.getElementById('startRecording')?.addEventListener('click', async () => {
+    const resultDiv = document.getElementById('startRecordingResult');
+    const sessionId = document.getElementById('sessionId').value;
+    const testName = document.getElementById('testName').value;
+    
+    try {
+      const response = await fetch('/api/manual-test/record/start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sessionId, testName })
+      });
+      const data = await response.json();
+      resultDiv.textContent = JSON.stringify(data, null, 2);
+      resultDiv.classList.add('text-green-600');
+    } catch (error) {
+      resultDiv.textContent = `Error: ${error.message}`;
+      resultDiv.classList.add('text-red-600');
+    }
+  });
+  
+  // Handle record action
+  document.getElementById('recordAction')?.addEventListener('click', async () => {
+    const resultDiv = document.getElementById('recordActionResult');
+    const sessionId = document.getElementById('actionSessionId').value;
+    const actionType = document.getElementById('actionType').value;
+    const target = document.getElementById('actionTarget').value;
+    
+    try {
+      const response = await fetch('/api/manual-test/record/action', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId,
+          action: {
+            type: actionType,
+            target
+          }
+        })
+      });
+      const data = await response.json();
+      resultDiv.textContent = JSON.stringify(data, null, 2);
+      resultDiv.classList.add('text-green-600');
+    } catch (error) {
+      resultDiv.textContent = `Error: ${error.message}`;
+      resultDiv.classList.add('text-red-600');
+    }
+  });
+  
+  // Handle stop recording
+  document.getElementById('stopRecording')?.addEventListener('click', async () => {
+    const resultDiv = document.getElementById('stopRecordingResult');
+    const sessionId = document.getElementById('stopSessionId').value;
+    
+    try {
+      const response = await fetch('/api/manual-test/record/stop', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sessionId })
+      });
+      const data = await response.json();
+      resultDiv.textContent = JSON.stringify(data, null, 2);
+      resultDiv.classList.add('text-green-600');
+    } catch (error) {
+      resultDiv.textContent = `Error: ${error.message}`;
+      resultDiv.classList.add('text-red-600');
+    }
+  });
+  
+  // Handle replay test
+  document.getElementById('replayTest')?.addEventListener('click', async () => {
+    const resultDiv = document.getElementById('replayTestResult');
+    const testName = document.getElementById('replayTestName').value;
+    
+    try {
+      const response = await fetch('/api/manual-test/replay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ testName })
+      });
+      const data = await response.json();
+      resultDiv.textContent = JSON.stringify(data, null, 2);
+      resultDiv.classList.add('text-green-600');
+    } catch (error) {
+      resultDiv.textContent = `Error: ${error.message}`;
+      resultDiv.classList.add('text-red-600');
+    }
+  });
+</script>

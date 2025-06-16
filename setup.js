@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
-const { spawnSync } = require('child_process');
-const path = require('path');
-const fs = require('fs');
+import { spawnSync } from 'child_process';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = process.cwd();
 
 console.log('\n🚀 Setting up Test Automation Agent...\n');
 
@@ -15,7 +19,7 @@ console.log('\n📦 Installing UI dependencies...');
 spawnSync('npm', ['install'], { 
   stdio: 'inherit', 
   shell: true,
-  cwd: path.join(process.cwd(), 'agent-ui')
+  cwd: path.join(rootDir, 'agent-ui')
 });
 
 // Install runner dependencies
