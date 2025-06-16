@@ -1,4 +1,4 @@
-import { initializeRunner } from '../../../services/runner/run.js';
+import { initializeRunner } from '../../../services/runner/runner-api.js';
 
 // Initialize runner with default options
 const runner = initializeRunner();

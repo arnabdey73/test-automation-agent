@@ -301,9 +301,38 @@ The UI component is configured to deploy on Vercel:
 Or deploy directly using Vercel CLI:
 
 ```bash
-cd agent-ui
 vercel --prod
 ```
+
+### Deploying to Vercel
+
+To deploy this application to Vercel:
+
+1. Make sure you have the Vercel CLI installed:
+
+   ```bash
+   npm install -g vercel
+   ```
+
+2. Login to your Vercel account:
+
+   ```bash
+   vercel login
+   ```
+
+3. Deploy the application:
+
+   ```bash
+   vercel --prod
+   ```
+
+4. For continuous deployment, connect your GitHub repository to Vercel and set the following:
+   - Framework Preset: Astro
+   - Build Command: npm run build
+   - Output Directory: dist
+   - Install Command: npm install
+
+Note: The project is configured with the Vercel adapter for Astro, which ensures proper serverless deployment.
 
 ## Contributing
 

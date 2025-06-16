@@ -52,7 +52,7 @@ async function buildApp() {
 function startServer() {
   console.log(`🌎 Starting server on port ${port}...`);
   
-  const server = spawn('node', ['./dist/server/entry.mjs'], { 
+  const server = spawn('node', ['./dist/entry.mjs'], { 
     stdio: 'inherit', 
     shell: true,
     env: { ...process.env, PORT: port, HOST: '0.0.0.0' }

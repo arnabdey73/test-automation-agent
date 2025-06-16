@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import node from '@astrojs/node';
+// import vercel from '@astrojs/vercel/serverless';
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,7 +14,7 @@ export default defineConfig({
   ],
   // Enable server-side rendering for API routes
   output: 'server',
-  // Add Node.js adapter for server-side rendering
+  // Use Node adapter for local production
   adapter: node({
     mode: 'standalone',
   }),
@@ -39,6 +40,24 @@ export default defineConfig({
           drop_console: true,
         },
       },
+      rollupOptions: {
+        // Explicitly externalize modules to avoid build issues
+        external: [
+          'socket.io', 
+          'playwright',
+          'playwright-core',
+          '@playwright/test'
+        ]
+      },
     },
+    ssr: {
+      // Add modules to noExternal to ensure they're processed properly
+      noExternal: [
+        'socket.io', 
+        'socket.io-client', 
+        'engine.io-client', 
+        'engine.io'
+      ]
+    }
   },
 });

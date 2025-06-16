@@ -1,0 +1,11 @@
+{
+  "projectId": "test-automation-agent",
+  "orgId": "your-org-id",
+  "settings": {
+    "framework": "astro",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "devCommand": "npm run dev",
+    "installCommand": "npm install"
+  }
+}

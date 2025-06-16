@@ -5,6 +5,13 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Manual Test Simulator
+ * 
+ * Note: This uses Playwright for browser automation and requires a non-serverless environment.
+ * When deployed to Vercel or other serverless platforms, browser automation features will not work.
+ * Consider using this only in development or deploying to a server with proper system dependencies.
+ */
 class ManualTestSimulator {
   constructor() {
     this.browser = null;

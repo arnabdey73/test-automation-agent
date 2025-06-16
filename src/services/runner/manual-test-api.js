@@ -1,11 +1,21 @@
 import express from 'express';
-import ManualTestSimulator from '../ai/manual-test/simulator.js';
+import { createSimulator } from '../ai/manual-test/serverless-simulator.js';
 
 class ManualTestAPI {
   constructor() {
     this.router = express.Router();
-    this.simulator = new ManualTestSimulator();
+    this.simulator = null;
     this.setupRoutes();
+    this.initializeSimulator();
+  }
+  
+  async initializeSimulator() {
+    try {
+      // Use the factory function to get the appropriate simulator based on environment
+      this.simulator = await createSimulator();
+    } catch (error) {
+      console.error('Failed to initialize manual test simulator:', error);
+    }
   }
 
   setupRoutes() {
