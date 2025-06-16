@@ -1,8 +1,9 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
-import node from '@astrojs/node';
-// import vercel from '@astrojs/vercel/serverless';
+// import node from '@astrojs/node';
+// Import the Vercel adapter for deployment to Vercel
+import vercel from '@astrojs/vercel/serverless';
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,10 +15,15 @@ export default defineConfig({
   ],
   // Enable server-side rendering for API routes
   output: 'server',
-  // Use Node adapter for local production
-  adapter: node({
-    mode: 'standalone',
+  // Use Vercel adapter for deployment to Vercel
+  adapter: vercel({
+    analytics: true,
   }),
+  
+  // For local production testing, comment out the Vercel adapter above and uncomment this:
+  // adapter: node({
+  //   mode: 'standalone',
+  // }),
   // Set up server configuration
   server: {
     port: process.env.PORT ? parseInt(process.env.PORT) : 4000,
