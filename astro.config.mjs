@@ -21,6 +21,12 @@ export default defineConfig({
     includeFiles: ['.env.production'],
     maxDuration: 60, // Set function timeout to 60 seconds
     target: 'node20',
+    functionPerRoute: false, // Use a single function for all routes
+    deploy: {
+      cleanup: true, // Clean up deprecated functions to avoid deployment issues
+      buildOutputDirectory: '.vercel/output',
+      entrypoint: 'entry.mjs', // Explicitly set the entrypoint
+    },
   }),
   
   // For local production testing, comment out the Vercel adapter above and uncomment this:

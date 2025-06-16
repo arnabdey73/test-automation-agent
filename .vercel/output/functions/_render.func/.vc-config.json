@@ -1,6 +1,6 @@
 {
         "runtime": "nodejs20.x",
-        "handler": "dist/server/entry.mjs",
+        "handler": "entry.mjs",
         "launcherType": "Nodejs",
         "maxDuration": 60,
         "supportsResponseStreaming": true
